@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}My Allocation - HMS{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div><h2>Room Allocation</h2><p class="sub">{{ student.user.name }} ({{ student.roll_no }})</p></div>
+</div>
+
+<div class="card" style="max-width:820px">
+    <div class="card-body">
+        {% if allocation %}
+        <div class="row g-3">
+            <div class="col-md-6">
+                <dl class="kv">
+                    <dt>Room</dt><dd>{{ allocation.room.room_number }}</dd>
+                    <dt>Block</dt><dd>{{ allocation.room.block.name }}</dd>
+                    <dt>Floor</dt><dd>{{ allocation.room.floor }}</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl class="kv">
+                    <dt>Allocated on</dt><dd>{{ allocation.allocation_date }}</dd>
+                    <dt>Start date</dt><dd>{{ allocation.start_date }}</dd>
+                    {% if allocation.end_date %}<dt>End date</dt><dd>{{ allocation.end_date }}</dd>{% endif %}
+                    <dt>Status</dt><dd><span class="badge bg-success">{{ allocation.status }}</span></dd>
+                </dl>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-info mb-0">You currently have no active room allocation.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

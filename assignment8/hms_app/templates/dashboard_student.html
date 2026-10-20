@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard - HMS{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div><h2>Hello, {{ student.user.name.split(' ')[0] }}</h2><p class="sub">Your hostel profile and room</p></div>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header"><h5><i class="bi bi-person-badge"></i> Profile</h5></div>
+            <div class="card-body">
+                <dl class="kv">
+                    <dt>Name</dt><dd>{{ student.user.name }}</dd>
+                    <dt>Email</dt><dd>{{ student.user.email }}</dd>
+                    <dt>Roll No</dt><dd>{{ student.roll_no }}</dd>
+                    <dt>Course</dt><dd>{{ student.course }}</dd>
+                    <dt>Batch</dt><dd>{{ student.batch }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header"><h5><i class="bi bi-door-open"></i> Room Allocation</h5></div>
+            <div class="card-body">
+                {% if allocation %}
+                <dl class="kv">
+                    <dt>Room</dt><dd>{{ allocation.room.room_number }} (Block {{ allocation.room.block.name }})</dd>
+                    <dt>Floor</dt><dd>{{ allocation.room.floor }}</dd>
+                    <dt>Allocated on</dt><dd>{{ allocation.allocation_date }}</dd>
+                    <dt>Start date</dt><dd>{{ allocation.start_date }}</dd>
+                    {% if allocation.end_date %}<dt>End date</dt><dd>{{ allocation.end_date }}</dd>{% endif %}
+                    <dt>Status</dt><dd><span class="badge bg-success">{{ allocation.status }}</span></dd>
+                </dl>
+                {% else %}
+                <div class="empty"><i class="bi bi-house-x"></i>No active room allocation.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

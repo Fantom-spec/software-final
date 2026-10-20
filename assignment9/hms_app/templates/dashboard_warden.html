@@ -1,0 +1,54 @@
+{% extends "layout_authenticated.html" %}
+{% from "_macros.html" import room_badge, occupancy, empty, dashboard_stat, quick_action %}
+
+{% block title %}Warden Dashboard - {{ app_short_name }}{% endblock %}
+
+{% block page_title %}Warden Dashboard{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active" aria-current="page">Warden Dashboard</li>
+{% endblock %}
+
+{% block page_content %}
+<div class="page-head">
+    <div><h2>Warden Dashboard</h2><p class="sub">Live room status across all blocks</p></div>
+    <a href="{{ url_for('room_allocation.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> New Allocation</a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">{{ dashboard_stat('door-open', 'primary', stats.total_rooms, 'Total Rooms') }}</div>
+    <div class="col-6 col-lg-3">{{ dashboard_stat('check2-circle', 'success', stats.available_rooms, 'Available Rooms') }}</div>
+    <div class="col-6 col-lg-3">{{ dashboard_stat('house-lock', 'warning', stats.occupied_rooms, 'Occupied Rooms') }}</div>
+    <div class="col-6 col-lg-3">
+        {% set bed_pct = (stats.used_beds / stats.total_beds * 100)|round|int if stats.total_beds else 0 %}
+        {{ dashboard_stat('people', 'info', bed_pct ~ '%', 'Bed Occupancy') }}
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Room Status</h5>
+        <a href="{{ url_for('room_allocation.available_rooms') }}" class="btn btn-sm btn-outline-primary">View Available</a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead><tr><th>Room</th><th>Block</th><th>Floor</th><th>Capacity</th><th>Occupancy</th><th>Available</th><th>Status</th></tr></thead>
+            <tbody>
+            {% for room in rooms %}
+                <tr>
+                    <td class="fw-semibold">{{ room.room_number }}</td>
+                    <td>{{ room.block.name }}</td>
+                    <td>{{ room.floor }}</td>
+                    <td>{{ room.capacity }}</td>
+                    <td>{{ occupancy(room) }}</td>
+                    <td><span class="badge bg-{{ 'success' if room.check_availability() else 'secondary' }}">{{ room.capacity - room.occupied_beds }}</span></td>
+                    <td>{{ room_badge(room.status) }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="7">{{ empty('door-closed', 'No rooms found.') }}</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

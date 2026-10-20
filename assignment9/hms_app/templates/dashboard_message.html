@@ -1,0 +1,16 @@
+{% extends "layout_authenticated.html" %}
+{% from "_macros.html" import empty %}
+
+{% block title %}Dashboard - {{ app_short_name }}{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+{% endblock %}
+
+{% block page_content %}
+<div class="card"><div class="card-body"><div class="empty"><i class="bi bi-person-exclamation"></i>
+    Nothing to show for {{ user.name }} yet. Please contact the administrator.
+</div></div></div>
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends "layout_authenticated.html" %}
+{% from "_macros.html" import occupancy %}
+
+{% block title %}Reallocate Room - {{ app_short_name }}{% endblock %}
+
+{% block page_title %}Reallocate Room{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('room_allocation.index') }}">Allocations</a></li>
+<li class="breadcrumb-item"><a href="{{ url_for('room_allocation.reallocate', allocation_id=allocation.allocation_id) }}">Reallocate</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ allocation.student.user.name }}</li>
+{% endblock %}
+
+{% block page_content %}
+<div class="page-head">
+    <div><h2>Reallocate Room</h2><p class="sub">Move a student to a different room</p></div>
+    <a href="{{ url_for('room_allocation.index') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back to list</a>
+</div>
+
+<div class="row g-3" style="max-width:980px">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header"><h5>Current Allocation</h5></div>
+            <div class="card-body">
+                <dl class="kv">
+                    <dt>Student</dt><dd>{{ allocation.student.user.name }} ({{ allocation.student.roll_no }})</dd>
+                    <dt>Course</dt><dd>{{ allocation.student.course }} ({{ allocation.student.batch }})</dd>
+                    <dt>Current room</dt><dd>{{ allocation.room.room_number }} (Block {{ allocation.room.block.name }}, Floor {{ allocation.room.floor }})</dd>
+                    <dt>Current occupancy</dt><dd>{{ occupancy(allocation.room) }}</dd>
+                    <dt>Allocated on</dt><dd>{{ allocation.allocation_date }}</dd>
+                    <dt>Start date</dt><dd>{{ allocation.start_date }}</dd>
+                    {% if allocation.end_date %}<dt>End date</dt><dd>{{ allocation.end_date }}</dd>{% endif %}
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header"><h5>New Room</h5></div>
+            <div class="card-body">
+                <form method="POST" class="needs-validation" novalidate>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <div class="mb-3">
+                        <label for="new_room_id" class="form-label">New room <span class="text-danger">*</span></label>
+                        <select class="form-select" id="new_room_id" name="new_room_id" required>
+                            <option value="">Select new room</option>
+                            {% for room in rooms %}
+                            {% if room.room_id != allocation.room_id %}
+                            <option value="{{ room.room_id }}" data-capacity="{{ room.capacity }}" data-occupied="{{ room.occupied_beds }}">
+                                {{ room.block.name }} - {{ room.room_number }} (Floor {{ room.floor }}, {{ room.capacity - room.occupied_beds }} of {{ room.capacity }} free)
+                            </option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                        <div class="invalid-feedback">Please select a new room.</div>
+                        <div id="new-room-info" class="form-text mt-1"></div>
+                    </div>
+                    
+                    <div class="alert alert-info d-none" id="new-availability-preview" role="alert">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <span id="new-availability-text"></span>
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-arrow-left-right"></i> Reallocate</button>
+                        <a href="{{ url_for('room_allocation.index') }}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var roomSelect = document.getElementById('new_room_id');
+    var roomInfo = document.getElementById('new-room-info');
+    var availabilityPreview = document.getElementById('new-availability-preview');
+    var availabilityText = document.getElementById('new-availability-text');
+
+    roomSelect.addEventListener('change', function() {
+        var selectedOption = this.options[this.selectedIndex];
+        var capacity = selectedOption.dataset.capacity;
+        var occupied = selectedOption.dataset.occupied;
+        
+        if (capacity && occupied) {
+            var free = parseInt(capacity) - parseInt(occupied);
+            var pct = Math.round((parseInt(occupied) / parseInt(capacity)) * 100);
+            
+            roomInfo.innerHTML = '<strong>Capacity:</strong> ' + capacity + ' | <strong>Occupied:</strong> ' + occupied + ' | <strong>Free:</strong> ' + free + ' (' + pct + '% full)';
+            
+            if (free > 0) {
+                availabilityPreview.classList.remove('d-none', 'alert-danger', 'alert-warning');
+                availabilityPreview.classList.add('alert-success');
+                availabilityText.textContent = 'Room has ' + free + ' free bed(s) available for reallocation.';
+            } else {
+                availabilityPreview.classList.remove('d-none', 'alert-success');
+                availabilityPreview.classList.add('alert-danger');
+                availabilityText.textContent = 'Room is full. Cannot reallocate to this room.';
+            }
+        } else {
+            roomInfo.innerHTML = '';
+            availabilityPreview.classList.add('d-none');
+        }
+    });
+
+    // Form validation
+    var form = document.querySelector('.needs-validation');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    }, false);
+});
+</script>
+{% endblock %}

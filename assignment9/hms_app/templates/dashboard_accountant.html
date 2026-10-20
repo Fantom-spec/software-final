@@ -1,0 +1,20 @@
+{% extends "layout_authenticated.html" %}
+{% from "_macros.html" import empty %}
+
+{% block title %}Accountant Dashboard - {{ app_short_name }}{% endblock %}
+
+{% block page_title %}Accountant Dashboard{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+{% endblock %}
+
+{% block page_content %}
+<div class="page-head"><div><h2>Accountant Dashboard</h2></div></div>
+<div class="card">
+    <div class="card-header"><h5>Fee Management</h5></div>
+    <div class="card-body">
+        <div class="empty"><i class="bi bi-cash-coin"></i>Fee management features are coming soon.</div>
+    </div>
+</div>
+{% endblock %}

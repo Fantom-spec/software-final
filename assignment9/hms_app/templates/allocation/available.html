@@ -1,0 +1,83 @@
+{% extends "layout_authenticated.html" %}
+{% from "_macros.html" import occupancy, empty, room_badge %}
+
+{% block title %}Available Rooms - {{ app_short_name }}{% endblock %}
+
+{% block page_title %}Available Rooms{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('room_allocation.available_rooms') }}">Available Rooms</a></li>
+<li class="breadcrumb-item active" aria-current="page">List</li>
+{% endblock %}
+
+{% block page_content %}
+<div class="page-head">
+    <div><h2>Available Rooms</h2><p class="sub">Rooms with at least one free bed</p></div>
+</div>
+
+<div class="filter-bar">
+    <form method="GET" class="d-flex flex-wrap gap-2 align-items-end w-100">
+        <div>
+            <label for="block" class="form-label visually-hidden">Block</label>
+            <select class="form-select filter-select" id="block" name="block" onchange="this.form.submit()">
+                <option value="">All Blocks</option>
+                {% for block in blocks %}
+                <option value="{{ block.block_id }}" {% if block_filter == block.block_id|string %}selected{% endif %}>{{ block.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="ms-auto">
+            <label class="form-check m-0">
+                <input type="checkbox" class="form-check-input" name="show_all" value="true" {% if show_all == 'true' %}checked{% endif %} onchange="this.form.submit()">
+                <span class="form-check-label ms-1">Show full rooms</span>
+            </label>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead><tr><th>Room</th><th>Block</th><th>Floor</th><th>Capacity</th><th>Occupancy</th><th>Free beds</th><th>Status</th></tr></thead>
+            <tbody>
+            {% for room in rooms %}
+                <tr>
+                    <td class="fw-semibold">{{ room.room_number }}</td>
+                    <td>{{ room.block.name }}</td>
+                    <td>{{ room.floor }}</td>
+                    <td>{{ room.capacity }}</td>
+                    <td>{{ occupancy(room) }}</td>
+                    <td><span class="badge bg-success">{{ room.capacity - room.occupied_beds }}</span></td>
+                    <td>{{ room_badge(room.status) }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="7">{{ empty('house-x', 'No available rooms.') }}</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% if full_rooms %}
+<div class="card mt-4">
+    <div class="card-header"><h5>Full Rooms</h5></div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead><tr><th>Room</th><th>Block</th><th>Floor</th><th>Capacity</th><th>Occupancy</th><th>Status</th></tr></thead>
+            <tbody>
+            {% for room in full_rooms %}
+                <tr class="table-secondary">
+                    <td class="fw-semibold">{{ room.room_number }}</td>
+                    <td>{{ room.block.name }}</td>
+                    <td>{{ room.floor }}</td>
+                    <td>{{ room.capacity }}</td>
+                    <td>{{ occupancy(room) }}</td>
+                    <td>{{ room_badge(room.status) }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

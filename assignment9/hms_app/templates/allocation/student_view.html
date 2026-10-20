@@ -1,0 +1,56 @@
+{% extends "layout_authenticated.html" %}
+{% from "_macros.html" import occupancy %}
+
+{% block title %}My Allocation - {{ app_short_name }}{% endblock %}
+
+{% block page_title %}Room Allocation{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+<li class="breadcrumb-item active" aria-current="page">My Allocation</li>
+{% endblock %}
+
+{% block page_content %}
+<div class="page-head">
+    <div><h2>Room Allocation</h2><p class="sub">{{ student.user.name }} ({{ student.roll_no }})</p></div>
+</div>
+
+<div class="card" style="max-width:820px">
+    <div class="card-body">
+        {% if allocation %}
+        <div class="row g-3">
+            <div class="col-md-6">
+                <dl class="kv">
+                    <dt>Room</dt><dd>{{ allocation.room.room_number }}</dd>
+                    <dt>Block</dt><dd>{{ allocation.room.block.name }}</dd>
+                    <dt>Floor</dt><dd>{{ allocation.room.floor }}</dd>
+                    <dt>Room capacity</dt><dd>{{ allocation.room.capacity }} beds</dd>
+                    <dt>Current occupancy</dt><dd>{{ occupancy(allocation.room) }}</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl class="kv">
+                    <dt>Allocated on</dt><dd>{{ allocation.allocation_date }}</dd>
+                    <dt>Start date</dt><dd>{{ allocation.start_date }}</dd>
+                    {% if allocation.end_date %}<dt>End date</dt><dd>{{ allocation.end_date }}</dd>{% endif %}
+                    <dt>Status</dt><dd><span class="badge bg-success">{{ allocation.status }}</span></dd>
+                </dl>
+            </div>
+        </div>
+        
+        <div class="mt-4 p-3 bg-light rounded">
+            <h6 class="mb-2"><i class="bi bi-info-circle me-2"></i>Room Details</h6>
+            <p class="mb-1"><strong>Location:</strong> {{ allocation.room.block.location }}</p>
+            <p class="mb-0"><strong>Block:</strong> {{ allocation.room.block.name }}</p>
+        </div>
+        {% else %}
+        <div class="alert alert-info mb-0">
+            <i class="bi bi-house-x me-2"></i>You currently have no active room allocation.
+            <a href="{{ url_for('room_allocation.available_rooms') }}" class="ms-3 btn btn-sm btn-primary">
+                <i class="bi bi-check2-circle"></i> View Available Rooms
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

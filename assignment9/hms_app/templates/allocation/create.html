@@ -1,0 +1,133 @@
+{% extends "layout_authenticated.html" %}
+
+{% block title %}Create Allocation - {{ app_short_name }}{% endblock %}
+
+{% block page_title %}Create Allocation{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('room_allocation.index') }}">Allocations</a></li>
+<li class="breadcrumb-item active" aria-current="page">Create</li>
+{% endblock %}
+
+{% block page_content %}
+<div class="page-head">
+    <div><h2>Create Room Allocation</h2><p class="sub">Assign a student to a room with a free bed</p></div>
+    <a href="{{ url_for('room_allocation.index') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back to list</a>
+</div>
+
+<div class="card" style="max-width:820px">
+    <div class="card-body">
+        <form method="POST" class="needs-validation" novalidate>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label for="student_id" class="form-label">Student <span class="text-danger">*</span></label>
+                    <select class="form-select" id="student_id" name="student_id" required>
+                        <option value="">Select student</option>
+                        {% for student in students %}
+                        <option value="{{ student.student_id }}">{{ student.user.name }} ({{ student.roll_no }})</option>
+                        {% endfor %}
+                    </select>
+                    <div class="invalid-feedback">Please select a student.</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="room_id" class="form-label">Room <span class="text-danger">*</span></label>
+                    <select class="form-select" id="room_id" name="room_id" required>
+                        <option value="">{{ 'Select room' if rooms else 'No rooms available' }}</option>
+                        {% for room in rooms %}
+                        <option value="{{ room.room_id }}" data-capacity="{{ room.capacity }}" data-occupied="{{ room.occupied_beds }}">
+                            {{ room.block.name }} - {{ room.room_number }} (Floor {{ room.floor }}, {{ room.capacity - room.occupied_beds }} of {{ room.capacity }} free)
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <div class="invalid-feedback">Please select a room.</div>
+                    <div id="room-info" class="form-text mt-1"></div>
+                </div>
+                <div class="col-md-6">
+                    <label for="start_date" class="form-label">Start date <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" id="start_date" name="start_date" value="{{ today }}" required min="{{ today }}">
+                    <div class="invalid-feedback">Please enter a valid start date.</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="end_date" class="form-label">End date <span class="text-muted">(optional)</span></label>
+                    <input type="date" class="form-control" id="end_date" name="end_date" min="{{ today }}">
+                    <div class="invalid-feedback">End date cannot be earlier than start date.</div>
+                </div>
+            </div>
+            
+            <!-- Room availability preview -->
+            <div class="alert alert-info d-none" id="availability-preview" role="alert">
+                <i class="bi bi-info-circle me-2"></i>
+                <span id="availability-text"></span>
+            </div>
+            
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Create allocation</button>
+                <a href="{{ url_for('room_allocation.index') }}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var s = document.getElementById('start_date');
+    var e = document.getElementById('end_date');
+    var roomSelect = document.getElementById('room_id');
+    var availabilityPreview = document.getElementById('availability-preview');
+    var availabilityText = document.getElementById('availability-text');
+    var roomInfo = document.getElementById('room-info');
+
+    // Keep end date on/after start date
+    s.addEventListener('change', function () {
+        e.min = s.value;
+        if (e.value && e.value < s.value) e.value = s.value;
+    });
+    e.min = s.value || e.min;
+
+    // Room selection change - show availability info
+    roomSelect.addEventListener('change', function() {
+        var selectedOption = this.options[this.selectedIndex];
+        var capacity = selectedOption.dataset.capacity;
+        var occupied = selectedOption.dataset.occupied;
+        
+        if (capacity && occupied) {
+            var free = parseInt(capacity) - parseInt(occupied);
+            var pct = Math.round((parseInt(occupied) / parseInt(capacity)) * 100);
+            
+            roomInfo.innerHTML = '<strong>Capacity:</strong> ' + capacity + ' | <strong>Occupied:</strong> ' + occupied + ' | <strong>Free:</strong> ' + free + ' (' + pct + '% full)';
+            
+            if (free > 0) {
+                availabilityPreview.classList.remove('d-none', 'alert-danger', 'alert-warning');
+                availabilityPreview.classList.add('alert-success');
+                availabilityText.textContent = 'Room has ' + free + ' free bed(s) available for allocation.';
+            } else {
+                availabilityPreview.classList.remove('d-none', 'alert-success');
+                availabilityPreview.classList.add('alert-danger');
+                availabilityText.textContent = 'Room is full. No beds available.';
+            }
+        } else {
+            roomInfo.innerHTML = '';
+            availabilityPreview.classList.add('d-none');
+        }
+    });
+
+    // Form validation
+    var form = document.querySelector('.needs-validation');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    }, false);
+
+    // Trigger room info on load if a room is pre-selected
+    if (roomSelect.value) {
+        roomSelect.dispatchEvent(new Event('change'));
+    }
+});
+</script>
+{% endblock %}

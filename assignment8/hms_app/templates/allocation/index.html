@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% from "_macros.html" import empty %}
+
+{% block title %}Room Allocations - HMS{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div><h2>Room Allocations</h2><p class="sub">{{ allocations|length }} active allocation{{ '' if allocations|length == 1 else 's' }}</p></div>
+    <a href="{{ url_for('room_allocation.create') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> New Allocation</a>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr><th>Student</th><th>Roll No</th><th>Room</th><th>Block</th><th>Allocated</th><th>Start</th><th>End</th><th>Status</th><th class="text-end">Actions</th></tr>
+            </thead>
+            <tbody>
+            {% for alloc in allocations %}
+                <tr>
+                    <td class="fw-semibold">{{ alloc.student.user.name }}</td>
+                    <td>{{ alloc.student.roll_no }}</td>
+                    <td>{{ alloc.room.room_number }}</td>
+                    <td>{{ alloc.room.block.name }}</td>
+                    <td>{{ alloc.allocation_date }}</td>
+                    <td>{{ alloc.start_date }}</td>
+                    <td>{{ alloc.end_date or '—' }}</td>
+                    <td><span class="badge bg-{{ 'success' if alloc.status == 'active' else 'secondary' }}">{{ alloc.status }}</span></td>
+                    <td class="text-end text-nowrap">
+                        <a href="{{ url_for('room_allocation.reallocate', allocation_id=alloc.allocation_id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-arrow-left-right"></i> Reallocate</a>
+                        <form method="POST" action="{{ url_for('room_allocation.cancel', allocation_id=alloc.allocation_id) }}" class="d-inline" onsubmit="return confirm('Cancel this allocation?')">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i> Cancel</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="9">{{ empty('inbox', 'No active allocations found.') }}</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

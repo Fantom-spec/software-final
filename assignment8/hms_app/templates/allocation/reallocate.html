@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Reallocate Room - HMS{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div><h2>Reallocate Room</h2><p class="sub">Move a student to a different room</p></div>
+    <a href="{{ url_for('room_allocation.index') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back to list</a>
+</div>
+
+<div class="row g-3" style="max-width:980px">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header"><h5>Current allocation</h5></div>
+            <div class="card-body">
+                <dl class="kv">
+                    <dt>Student</dt><dd>{{ allocation.student.user.name }} ({{ allocation.student.roll_no }})</dd>
+                    <dt>Current room</dt><dd>{{ allocation.room.room_number }} (Block {{ allocation.room.block.name }}, Floor {{ allocation.room.floor }})</dd>
+                    <dt>Allocated on</dt><dd>{{ allocation.allocation_date }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header"><h5>New room</h5></div>
+            <div class="card-body">
+                <form method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <div class="mb-3">
+                        <label for="new_room_id" class="form-label">New room <span class="text-danger">*</span></label>
+                        <select class="form-select" id="new_room_id" name="new_room_id" required>
+                            <option value="">Select new room</option>
+                            {% for room in rooms %}
+                            {% if room.room_id != allocation.room_id %}
+                            <option value="{{ room.room_id }}">{{ room.block.name }} - {{ room.room_number }} (Floor {{ room.floor }}, {{ room.capacity - room.occupied_beds }} of {{ room.capacity }} free)</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-arrow-left-right"></i> Reallocate</button>
+                    <a href="{{ url_for('room_allocation.index') }}" class="btn btn-outline-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

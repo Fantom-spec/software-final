@@ -1,0 +1,23 @@
+# Test Dependencies for HMS Assessment 8
+# Install with: pip install -r requirements-test.txt
+
+# Core Flask dependencies (matching project spec)
+flask==3.0.3
+flask-sqlalchemy==3.1.1
+flask-login==0.6.3
+flask-wtf==1.2.1
+wtforms==3.1.1
+werkzeug==3.0.4
+
+# Database
+sqlalchemy==2.0.32
+# Using SQLite for testing (adaptation from MySQL spec)
+
+# Testing
+pytest==8.3.2
+pytest-cov==5.0.0
+pytest-flask==1.3.0
+
+# Utilities
+python-dotenv==1.0.1
+bcrypt==4.2.0

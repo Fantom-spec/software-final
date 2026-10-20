@@ -1,0 +1,24 @@
+{% macro room_badge(status) -%}
+<span class="badge bg-{{ 'success' if status == 'available' else 'danger' if status == 'full' else 'warning text-dark' }}">{{ status }}</span>
+{%- endmacro %}
+
+{% macro occupancy(room) -%}
+{% set pct = (room.occupied_beds / room.capacity * 100)|round|int if room.capacity else 0 %}
+<div class="occ">
+  <div class="progress" role="progressbar" aria-label="Occupancy" aria-valuenow="{{ pct }}" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar {{ 'bg-danger' if pct >= 100 else 'bg-warning' if pct >= 50 else 'bg-success' }}" style="width: {{ pct }}%"></div>
+  </div>
+  <small>{{ room.occupied_beds }} / {{ room.capacity }} beds</small>
+</div>
+{%- endmacro %}
+
+{% macro stat(icon, tone, value, label) -%}
+<div class="card"><div class="card-body stat">
+  <div class="icon tone-{{ tone }}"><i class="bi bi-{{ icon }}"></i></div>
+  <div><div class="value">{{ value }}</div><div class="label">{{ label }}</div></div>
+</div></div>
+{%- endmacro %}
+
+{% macro empty(icon, text) -%}
+<div class="empty"><i class="bi bi-{{ icon }}"></i>{{ text }}</div>
+{%- endmacro %}
