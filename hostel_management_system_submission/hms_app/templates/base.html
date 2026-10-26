@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ app_name }}{% endblock %}</title>
+    <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendor/bootstrap-icons/bootstrap-icons.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/hms.css') }}" rel="stylesheet">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    {% block body_content %}{% endblock %}
+
+    {% if not current_user %}
+    {% include '_flashes.html' %}
+    {% endif %}
+
+    {% if current_user %}
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title h5" id="confirmModalTitle">Please confirm</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="confirmModalMessage"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Go back</button>
+                    <button type="button" class="btn btn-danger" id="confirmModalOk">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script nonce="{{ csp_nonce }}">
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const mainContent = document.getElementById('mainContent');
+
+            if (sidebarToggle && sidebar && sidebarOverlay) {
+                sidebarToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('show');
+                    sidebarOverlay.classList.toggle('show');
+                    document.body.classList.toggle('sidebar-open');
+                });
+
+                sidebarOverlay.addEventListener('click', function() {
+                    sidebar.classList.remove('show');
+                    sidebarOverlay.classList.remove('show');
+                    document.body.classList.remove('sidebar-open');
+                });
+
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth >= 992) {
+                        sidebar.classList.remove('show');
+                        sidebarOverlay.classList.remove('show');
+                        document.body.classList.remove('sidebar-open');
+                    }
+                });
+            }
+
+            // Errors and warnings stay until dismissed; only success/info messages fade out.
+            document.querySelectorAll('.alert-dismissible.alert-success, .alert-dismissible.alert-info').forEach(function(alert) {
+                setTimeout(function() {
+                    var bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }, 5000);
+            });
+
+            // "Processing..." feedback on submit. It must only appear if the submission really goes ahead:
+            // page-level validation handlers run after this one and may cancel the event, so decide afterwards.
+            document.querySelectorAll('form').forEach(function(form) {
+                form.addEventListener('submit', function(e) {
+                    setTimeout(function() {
+                        if (e.defaultPrevented) return;
+                        var submitBtn = form.querySelector('button[type="submit"]');
+                        if (submitBtn && !submitBtn.disabled) {
+                            submitBtn.dataset.original = submitBtn.innerHTML;
+                            submitBtn.disabled = true;
+                            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Processing...';
+                        }
+                    }, 0);
+                });
+            });
+            // Returning with the Back button must not show a stale disabled "Processing..." button.
+            window.addEventListener('pageshow', function(e) {
+                if (!e.persisted) return;
+                document.querySelectorAll('button[data-original]').forEach(function(b) { b.disabled = false; b.innerHTML = b.dataset.original; });
+            });
+
+            document.querySelectorAll('[data-autosubmit]').forEach(function(el) {
+                el.addEventListener('change', function() { el.form.submit(); });
+            });
+
+            // Styled, accessible confirmation (replaces window.confirm): any <form data-confirm="message">
+            var modalEl = document.getElementById('confirmModal');
+            if (modalEl) {
+                var modal = new bootstrap.Modal(modalEl);
+                var pendingForm = null;
+                document.querySelectorAll('form[data-confirm]').forEach(function(form) {
+                    form.addEventListener('click', function(e) {
+                        if (!e.target.closest('button[type="submit"]')) return;
+                        e.preventDefault();
+                        pendingForm = form;
+                        document.getElementById('confirmModalMessage').textContent = form.getAttribute('data-confirm');
+                        modal.show();
+                    });
+                });
+                document.getElementById('confirmModalOk').addEventListener('click', function() {
+                    if (!pendingForm) return;
+                    var f = pendingForm;
+                    pendingForm = null;
+                    modal.hide();
+                    f.submit();
+                });
+            }
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

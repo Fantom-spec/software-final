@@ -1,0 +1,65 @@
+{% extends "layout_login.html" %}
+
+{% block title %}Login - {{ app_short_name }}{% endblock %}
+
+{% block page_content %}
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="card">
+      <div class="card-body p-4 p-md-5">
+        <div class="brand-mark mx-auto"><i class="bi bi-building"></i></div>
+        <h4 class="text-center mb-1">{{ app_name }}</h4>
+        <p class="text-center text-muted mb-4">Sign in to your account</p>
+        <form method="POST" novalidate>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" autocomplete="username" required autofocus placeholder="Enter your email">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="password" name="password" autocomplete="current-password" required placeholder="Enter your password">
+                    <button class="btn btn-outline-secondary" type="button" id="togglePw" aria-label="Show password"><i class="bi bi-eye"></i></button>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-2"><i class="bi bi-box-arrow-in-right me-2"></i>Login</button>
+        </form>
+      </div>
+    </div>
+
+    {% if demo %}
+    <div class="card mt-3">
+      <div class="card-body demo-list">
+        <div class="text-muted mb-2"><i class="bi bi-lightbulb"></i> Demo accounts — click to fill</div>
+        <div class="d-grid gap-1">
+          <button type="button" data-e="admin@hms.test" data-p="admin123"><span>Admin</span><span class="text-muted">admin@hms.test</span></button>
+          <button type="button" data-e="warden@hms.test" data-p="warden123"><span>Warden</span><span class="text-muted">warden@hms.test</span></button>
+          <button type="button" data-e="john@student.test" data-p="student123"><span>Student</span><span class="text-muted">john@student.test</span></button>
+          <button type="button" data-e="accountant@hms.test" data-p="accountant123"><span>Accountant</span><span class="text-muted">accountant@hms.test</span></button>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script nonce="{{ csp_nonce }}">
+{% if demo %}
+document.querySelectorAll('.demo-list button').forEach(function (b) {
+  b.addEventListener('click', function () {
+    document.getElementById('email').value = b.dataset.e;
+    document.getElementById('password').value = b.dataset.p;
+    document.getElementById('password').focus();
+  });
+});
+{% endif %}
+document.getElementById('togglePw').addEventListener('click', function () {
+  var f = document.getElementById('password'), show = f.type === 'password';
+  f.type = show ? 'text' : 'password';
+  this.querySelector('i').className = 'bi bi-eye' + (show ? '-slash' : '');
+});
+</script>
+{% endblock %}

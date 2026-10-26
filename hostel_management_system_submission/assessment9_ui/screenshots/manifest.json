@@ -1,0 +1,326 @@
+{
+  "generated": "2026-10-25T15:51:04.720Z",
+  "base": "demo server (scripts/serve_demo.py)",
+  "count": 45,
+  "byViewport": {
+    "desktop": 22,
+    "mobile": 23
+  },
+  "screenshots": [
+    {
+      "file": "login_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/auth/login",
+      "description": "Login screen (empty form)"
+    },
+    {
+      "file": "login_error_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/auth/login",
+      "description": "Login with wrong password: error feedback"
+    },
+    {
+      "file": "admin_dashboard_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/",
+      "description": "Admin dashboard (populated: statistics, occupancy, recent allocations)"
+    },
+    {
+      "file": "admin_allocations_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/allocation/",
+      "description": "Allocation list with 3 active allocations, filters and actions"
+    },
+    {
+      "file": "admin_create_form_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/allocation/create",
+      "description": "Create allocation form (empty)"
+    },
+    {
+      "file": "admin_create_form_filled_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/allocation/create",
+      "description": "Create allocation form filled in (Dana Evans, Block A 201); live room availability preview shown"
+    },
+    {
+      "file": "admin_create_error_dates_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/allocation/create",
+      "description": "Server-side validation error (end date before start date); entered values are kept"
+    },
+    {
+      "file": "admin_create_error_duplicate_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/allocation/create",
+      "description": "Business-rule error: student already has an active allocation"
+    },
+    {
+      "file": "admin_reallocate_form_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/allocation/3/reallocate",
+      "description": "Reallocate form for an existing allocation"
+    },
+    {
+      "file": "admin_cancel_confirmation_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/allocation/",
+      "description": "Confirmation modal before cancelling an allocation"
+    },
+    {
+      "file": "admin_available_rooms_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/allocation/available",
+      "description": "Available rooms with block filter and occupancy bars"
+    },
+    {
+      "file": "admin_available_rooms_all_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/allocation/available?show_all=true",
+      "description": "Available rooms including full rooms (show all)"
+    },
+    {
+      "file": "admin_rooms_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/rooms",
+      "description": "Rooms list (admin: Add block / Add room buttons)"
+    },
+    {
+      "file": "admin_add_block_form_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/blocks/new",
+      "description": "Add block form (admin only)"
+    },
+    {
+      "file": "admin_add_room_form_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/rooms/new",
+      "description": "Add room form filled in (admin only)"
+    },
+    {
+      "file": "admin_add_student_form_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/students/new",
+      "description": "Add student form (admin only)"
+    },
+    {
+      "file": "admin_add_student_error_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/students/new",
+      "description": "Add student: duplicate e-mail rejected; entries kept, passwords cleared"
+    },
+    {
+      "file": "admin_students_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/students",
+      "description": "Students list with allocation status"
+    },
+    {
+      "file": "warden_dashboard_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/",
+      "description": "Warden dashboard"
+    },
+    {
+      "file": "student_dashboard_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/",
+      "description": "Student dashboard (with current allocation)"
+    },
+    {
+      "file": "student_my_allocation_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/allocation/student/1",
+      "description": "Student \"My Allocation\" page"
+    },
+    {
+      "file": "student_available_rooms_desktop.png",
+      "viewport": "desktop",
+      "size": "1366x800",
+      "url": "/allocation/available",
+      "description": "Student view of available rooms (read-only)"
+    },
+    {
+      "file": "login_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/auth/login",
+      "description": "Login screen (empty form)"
+    },
+    {
+      "file": "login_error_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/auth/login",
+      "description": "Login with wrong password: error feedback"
+    },
+    {
+      "file": "admin_dashboard_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/",
+      "description": "Admin dashboard (populated: statistics, occupancy, recent allocations)"
+    },
+    {
+      "file": "admin_allocations_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/allocation/",
+      "description": "Allocation list with 3 active allocations, filters and actions"
+    },
+    {
+      "file": "admin_create_form_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/allocation/create",
+      "description": "Create allocation form (empty)"
+    },
+    {
+      "file": "admin_create_form_filled_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/allocation/create",
+      "description": "Create allocation form filled in (Dana Evans, Block A 201); live room availability preview shown"
+    },
+    {
+      "file": "admin_create_error_dates_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/allocation/create",
+      "description": "Server-side validation error (end date before start date); entered values are kept"
+    },
+    {
+      "file": "admin_create_error_duplicate_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/allocation/create",
+      "description": "Business-rule error: student already has an active allocation"
+    },
+    {
+      "file": "admin_reallocate_form_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/allocation/3/reallocate",
+      "description": "Reallocate form for an existing allocation"
+    },
+    {
+      "file": "admin_cancel_confirmation_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/allocation/",
+      "description": "Confirmation modal before cancelling an allocation"
+    },
+    {
+      "file": "admin_available_rooms_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/allocation/available",
+      "description": "Available rooms with block filter and occupancy bars"
+    },
+    {
+      "file": "admin_available_rooms_all_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/allocation/available?show_all=true",
+      "description": "Available rooms including full rooms (show all)"
+    },
+    {
+      "file": "admin_rooms_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/rooms",
+      "description": "Rooms list (admin: Add block / Add room buttons)"
+    },
+    {
+      "file": "admin_add_block_form_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/blocks/new",
+      "description": "Add block form (admin only)"
+    },
+    {
+      "file": "admin_add_room_form_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/rooms/new",
+      "description": "Add room form filled in (admin only)"
+    },
+    {
+      "file": "admin_add_student_form_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/students/new",
+      "description": "Add student form (admin only)"
+    },
+    {
+      "file": "admin_add_student_error_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/students/new",
+      "description": "Add student: duplicate e-mail rejected; entries kept, passwords cleared"
+    },
+    {
+      "file": "admin_students_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/students",
+      "description": "Students list with allocation status"
+    },
+    {
+      "file": "admin_menu_open_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/",
+      "description": "Mobile: navigation drawer opened with the hamburger button"
+    },
+    {
+      "file": "warden_dashboard_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/",
+      "description": "Warden dashboard"
+    },
+    {
+      "file": "student_dashboard_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/",
+      "description": "Student dashboard (with current allocation)"
+    },
+    {
+      "file": "student_my_allocation_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/allocation/student/1",
+      "description": "Student \"My Allocation\" page"
+    },
+    {
+      "file": "student_available_rooms_mobile.png",
+      "viewport": "mobile",
+      "size": "390x844",
+      "url": "/allocation/available",
+      "description": "Student view of available rooms (read-only)"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+python: 3.12.3 (CPython)
+platform: Linux-6.18.44-fc-v153-x86_64-with-glibc2.39
+packages:
+  beautifulsoup4==4.12.3
+  coverage==7.17.0
+  Flask==3.0.3
+  Flask-SQLAlchemy==3.1.1
+  Flask-WTF==1.2.1
+  pytest==8.3.2
+  pytest-cov==5.0.0
+  python-dotenv==1.0.1
+  SQLAlchemy==2.0.32
+  Werkzeug==3.0.4
+  WTForms==3.1.1

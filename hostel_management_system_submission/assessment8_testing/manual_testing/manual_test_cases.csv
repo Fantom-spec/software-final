@@ -1,0 +1,154 @@
+TC-ID,Module,Requirement,Technique,Priority,Scenario,Preconditions,Steps,Input Data,Expected Result
+AUTH-01,Authentication,RA-11,UI only,P1,Valid admin login,Server started with DEMO data (see TESTING_PROCEDURE.md section 3). Not logged in.,"1. Open http://127.0.0.1:5000/auth/login
+2. Enter the admin e-mail and password
+3. Click Login",admin@hms.test / admin123,"Redirected to the Admin Dashboard; message ""Welcome, Admin User!"" is shown; sidebar shows the admin menu."
+AUTH-02,Authentication,RA-11,UI only,P2,Valid warden login,Not logged in.,"1. Open the login page
+2. Enter the warden e-mail and password
+3. Click Login",warden@hms.test / warden123,"Redirected to the Warden Dashboard; message ""Welcome, Warden Smith!"" is shown."
+AUTH-03,Authentication,RA-11,UI only,P2,Valid student login,Not logged in.,"1. Open the login page
+2. Enter the student e-mail and password
+3. Click Login",john@student.test / student123,"Redirected to the Student Dashboard; message ""Welcome, John Doe!"" is shown."
+AUTH-04,Authentication,RA-11,UI only,P1,Wrong password rejected,Not logged in.,"1. Open the login page
+2. Enter admin@hms.test with password ""wrong-password""
+3. Click Login",admin@hms.test / wrong-password,"Stay on the login page; error ""Invalid email or password."" is shown; no session is created."
+AUTH-05,Authentication,RA-11,UI only,P2,Unknown user rejected,Not logged in.,"1. Open the login page
+2. Enter nobody@example.com with any password
+3. Click Login",nobody@example.com / x,"Same error ""Invalid email or password."" (the message must not reveal whether the account exists)."
+AUTH-06,Authentication,RA-11,UI only,P1,Logout ends the session,Logged in as admin.,"1. Click Logout at the bottom of the sidebar
+2. In the address bar open http://127.0.0.1:5000/allocation/",,"After step 1: login page with ""You have been logged out.""; after step 2: redirected to the login page with ""Please log in to access this page."""
+AUTH-07,Authentication,RA-11,UI only,P1,Anonymous access is blocked,Not logged in.,"1. Open http://127.0.0.1:5000/
+2. Open /allocation/
+3. Open /rooms",,"Every URL redirects to the login page with ""Please log in to access this page."""
+AUTH-08,Authentication,RA-12,UI + browser DevTools,P1,Login requires a CSRF token,Not logged in; browser DevTools open.,"1. Open the login page
+2. In DevTools > Elements delete the hidden <input name=""csrf_token"">
+3. Enter valid admin credentials and click Login",admin@hms.test / admin123,"The server rejects the request: page titled ""Your request could not be verified"" (HTTP 400, visible in the DevTools Network tab). You are not logged in."
+AUTH-09,Authentication,RA-11,UI only,P2,Lockout after repeated failed logins,Restart the server with LOGIN_MAX_ATTEMPTS=5 (TESTING_PROCEDURE.md section 3). Not logged in.,"1. Submit the login form 5 times with dana@student.test and a wrong password
+2. Submit a 6th time with the CORRECT password (student123)
+3. Log in with john@student.test / student123",dana@student.test,"Attempts 1-5: ""Invalid email or password.""; attempt 6 (even with the correct password): ""Too many failed login attempts. Try again in about 15 minute(s).""; step 3 (a different account) still works."
+AUTH-10,Authentication,"RA-11, RA-12",UI only,P1,Logout is not possible via a link (GET),Logged in as admin.,"1. In the address bar open http://127.0.0.1:5000/auth/logout
+2. Open http://127.0.0.1:5000/",,"Step 1 shows ""Method Not Allowed"" (HTTP 405). Step 2 shows the dashboard: you are still logged in."
+ALLOC-01,Allocation,RA-01,UI only,P1,"Allocate a student, open-ended",Logged in as admin. Fresh demo data without allocations. No allocations exist.,"1. Sidebar > Allocations > New Allocation
+2. Student: John Doe; Room: Block A, room 101
+3. Leave the start date at today; leave End date empty
+4. Click Create allocation",John Doe -> Block A / 101,"Redirected to the allocation list; message ""Room 101 allocated to John Doe successfully.""; list shows John Doe, Block A, room 101, Status Active, End ""—""."
+ALLOC-08,Allocation,RA-01,UI only,P2,Allocate with an end date,ALLOC-01 done.,"1. New Allocation
+2. Student: Jane Smith; Room: Block A, room 101
+3. Start: today; End: today + 90 days
+4. Create allocation",Jane Smith -> Block A / 101,Success message for room 101 and Jane Smith; list shows the end date. Room Block A 101 is now 2/2.
+OCC-01,Occupancy,RA-04,UI only,P1,Room becomes Full at capacity,ALLOC-01 and ALLOC-08 done.,"1. Sidebar > Rooms
+2. Find Block A room 101",,Block A 101 shows 2 of 2 beds occupied and status Full.
+ALLOC-05,Allocation,RA-03,UI only,P1,Student with an active allocation cannot get a second,ALLOC-01 done (John has an active allocation).,"1. New Allocation
+2. Student: John Doe; Room: Block B, room 101
+3. Create allocation",John Doe -> Block B / 101,"Error ""Student John Doe already has an active room allocation.""; no new row in the allocation list."
+ALLOC-15,Allocation,"RA-02, UI-03",UI only,P2,Form keeps your input after a server-side error,Immediately after ALLOC-05.,1. Look at the New Allocation form that is displayed together with the error,,"The form is shown again with Student = John Doe, Room = Block B 101 and the start date still selected (you do not have to re-enter everything)."
+ALLOC-11,Allocation,RA-01,UI only,P2,Start date equal to end date is accepted,Logged in as admin.,"1. New Allocation
+2. Student: Bob Wilson; Room: Block A, room 102
+3. Start: today; End: today
+4. Create allocation",Bob Wilson -> Block A / 102,"Success message ""Room 102 allocated to Bob Wilson successfully."""
+ALLOC-02,Allocation,RA-04,UI + browser DevTools,P1,Allocating to a room that filled up meanwhile is refused,"Block A 102 has exactly 1 free bed (Bob only). Two browser tabs on the New Allocation form, both opened BEFORE step 1 (both list Block A 102).","1. Tab 1: allocate Alice Brown to Block A 102 and submit (succeeds, room now full)
+2. Tab 2 (stale form, still lists room 102): select Carlos Diaz and Block A 102, submit",Carlos Diaz -> Block A / 102 (stale form),"Tab 2 shows error ""Room 102 is not available (capacity: 2, occupied: 2).""; Carlos has no allocation; room 102 stays 2/2."
+ALLOC-09,Allocation,RA-01,UI only,P2,Warden can create an allocation,Logged in as WARDEN (log out first).,"1. New Allocation
+2. Student: Carlos Diaz; Room: Block A, room 201
+3. Create allocation",warden@hms.test / warden123 / Carlos Diaz -> Block A / 201,"Success message ""Room 201 allocated to Carlos Diaz successfully."""
+ALLOC-03,Allocation,RA-02,UI + browser DevTools,P2,Non-existent student id is rejected,Logged in as admin.,"1. Open New Allocation
+2. In DevTools change the value of one <option> in the Student select to 99999
+3. Select that option, choose a room, submit",student_id=99999,"Error ""Selected student does not exist.""; nothing created."
+ALLOC-04,Allocation,RA-02,UI + browser DevTools,P2,Non-existent room id is rejected,Logged in as admin.,"1. Open New Allocation
+2. In DevTools change the value of one <option> in the Room select to 99999
+3. Select a student and that room option, submit",room_id=99999,"Error ""Selected room does not exist.""; nothing created."
+ALLOC-06,Allocation,RA-02,UI only,P1,Required fields,Logged in as admin.,"1. Open New Allocation
+2. Leave Student and Room unselected
+3. Click Create allocation",,"The form is not submitted: the empty required fields are highlighted/flagged and the Create allocation button is still clickable (it must not stay stuck on ""Processing...""). (If you bypass the browser check the server answers ""Student, room, and start date are required."")"
+ALLOC-07,Allocation,RA-02,UI + browser DevTools,P2,Invalid date text is rejected,Logged in as admin.,"1. Open New Allocation
+2. In DevTools change the Start date <input type=""date""> to type=""text""
+3. Type 2026-13-45; select student and room; submit",2026-13-45,"Error ""Invalid date format. Use YYYY-MM-DD.""; nothing created; entered values kept."
+ALLOC-10,Allocation,RA-02,UI only,P1,End date before start date is rejected,Logged in as admin.,"1. Open New Allocation
+2. Choose a student without allocation (Dana Evans) and any available room
+3. Start: today + 10 days; End: today + 5 days
+4. Submit",start > end,"Submission refused: either the browser/JS shows a validation message (""End date cannot be earlier than start date."") or the server shows it; the button stays clickable; no allocation created."
+ALLOC-14,Allocation,RA-02,UI + browser DevTools,P2,Dates outside 2000-2100 are rejected,Logged in as admin.,"1. Open New Allocation
+2. In DevTools change Start date to type=""text"" and enter 1900-01-01; choose Dana Evans and a room; submit
+3. Repeat with 9999-12-31",1900-01-01 / 9999-12-31,"Error ""Dates must be between 2000-01-01 and 2100-12-31."" both times; nothing created."
+ALLOC-13,Allocation,RA-12,UI + browser DevTools,P1,Create requires a CSRF token,Logged in as admin.,"1. Open New Allocation and fill it with valid data (Dana Evans, Block A 202)
+2. In DevTools delete the hidden <input name=""csrf_token"">
+3. Submit",,"Page ""Your request could not be verified"" (HTTP 400); no allocation created for Dana Evans."
+REALLOC-01,Reallocation,RA-05,UI only,P1,Reallocate to a room with a free bed,John has an active allocation in Block A 101 (full 2/2).,"1. Allocations list > click the Reallocate icon on John Doe
+2. New room: Block B, room 101
+3. Click Reallocate",John: A/101 -> B/101,"Message ""Student reallocated to room 101 successfully.""; list shows John in Block B. Rooms page: Block A 101 is now 1/2 and Available; Block B 101 is 1/3."
+OCC-02,Occupancy,RA-04,UI only,P1,Room becomes Available again when a bed is freed,Right after REALLOC-01.,"1. Sidebar > Rooms
+2. Find Block A room 101",,Block A 101 shows 1 of 2 beds occupied and status Available.
+REALLOC-03,Reallocation,"RA-05, RA-04",UI only,P2,Full rooms are not offered,Block A 102 is full (Bob + Alice from ALLOC-02).,"1. Click Reallocate on Carlos Diaz
+2. Open the ""New room"" drop-down",,Block A 102 (full) is not in the list; only rooms with a free bed are offered.
+REALLOC-06,Reallocation,RA-05,UI + browser DevTools,P3,Reallocating to the same room is refused,Jane Smith is allocated to Block A 101 (room id 1 in the demo data).,"1. Click Reallocate on Jane Smith (her current room is not offered in the list)
+2. In DevTools > Elements change the value of any one <option> in the ""New room"" select to 1 (the id of Block A 101)
+3. Select that option and click Reallocate",new_room_id=1 (her current room),"Error ""Student is already in that room. Choose a different room.""; no change to the allocation or room counters."
+REALLOC-04,Reallocation,RA-05,UI only,P2,Room is required,Reallocate form open.,"1. Leave ""Select new room"" selected
+2. Click Reallocate",,"Not submitted (field flagged) and the Reallocate button stays clickable; if bypassed the server says ""New room is required."""
+REALLOC-02,Reallocation,RA-05,UI + browser DevTools,P3,Non-existent room id is rejected,Reallocate form open.,"1. In DevTools change an <option> value to 99999
+2. Select it and click Reallocate",room_id=99999,"Error ""Selected room does not exist.""; allocation unchanged."
+REALLOC-05,Reallocation,RA-12,UI + browser DevTools,P1,Reallocate requires a CSRF token,Reallocate form open.,"1. Delete the hidden csrf_token input in DevTools
+2. Choose a room; click Reallocate",,"Page ""Your request could not be verified"" (HTTP 400); allocation unchanged."
+CANCEL-02,Cancellation,"RA-06, UI-03",UI only,P1,"""Go back"" keeps the allocation","Active allocation exists (Carlos Diaz, Block A 201).","1. Allocations list > click the red Cancel (x) icon on Carlos Diaz
+2. In the dialog click ""Go back""",,"A modal ""Please confirm - Are you sure you want to cancel this allocation?"" appears; after Go back the dialog closes and the allocation is still Active."
+CANCEL-01,Cancellation,RA-06,UI only,P1,Confirm cancels and frees the bed,As CANCEL-02.,"1. Click the Cancel (x) icon on Carlos Diaz again
+2. Click ""Confirm""",,"Message ""Allocation cancelled successfully.""; Carlos no longer appears under Status = Active; Block A 201 shows 0 of 2 beds."
+CANCEL-04,Cancellation,RA-06,UI only,P2,Cancelled allocations offer no actions,CANCEL-01 done.,1. Allocations list > set Status filter to Cancelled > Filter,,Carlos Diaz is listed with status Cancelled and there are no Reallocate/Cancel buttons on that row.
+CANCEL-03,Cancellation,RA-12,UI + browser DevTools,P1,Cancel requires a CSRF token,Active allocation exists (e.g. Bob Wilson).,"1. In DevTools delete the hidden csrf_token input inside the Cancel form of Bob Wilson
+2. Click Cancel and Confirm",,"Page ""Your request could not be verified"" (HTTP 400); Bob's allocation is still Active."
+LIST-01,Allocation list,RA-07,UI only,P2,Search filters the list,Several active allocations.,"1. Allocations list > type ""Jane"" in the search box > Filter
+2. Search ""nobody-matches""",Jane / nobody-matches,"Step 1: only Jane Smith's row; step 2: ""No allocations found."""
+LIST-02,Allocation list,RA-07,UI only,P2,Block and status filters,Active and cancelled allocations exist.,"1. Select Block B > Filter
+2. Select Status Cancelled > Filter",,Step 1 lists only Block B rows; step 2 lists only cancelled allocations.
+AVAIL-01,Available rooms,RA-08,UI only,P1,Only rooms with free beds are listed,"Block A 101 (1/2), Block A 102 (full).",1. Sidebar > Available Rooms,,Block A 102 (full) is NOT listed; Block A 101 is listed with its free beds.
+AVAIL-03,Available rooms,"RA-08, RA-04",UI only,P2,"Block filter and ""Show full rooms""",As AVAIL-01.,"1. Tick ""Show full rooms""
+2. Choose Block B in the block drop-down",,"Step 1: Block A 102 appears marked full. Step 2: only Block B rooms are shown (no Block A rooms, full or not)."
+OCC-03,Occupancy,RA-04,UI only,P2,Full rooms cannot be picked when creating,Block A 102 is full.,1. New Allocation > open the Room drop-down,,Block A 102 is not offered.
+AVAIL-02,Available rooms,RA-08,UI only,P2,Student can view available rooms (read-only),Logged in as student.,1. Sidebar > Available Rooms,,Page loads; no allocation actions are offered.
+STUDENT-01,Student view,RA-09,UI only,P1,Student sees own allocation,Logged in as John Doe (allocated).,1. Sidebar > My Allocation,,Page shows John Doe's room and block (Block B 101 after REALLOC-01).
+STUDENT-02,Student view,RA-09,UI only,P1,Student cannot view another student's allocation,Logged in as John Doe. Jane Smith has student id 2.,1. In the address bar open http://127.0.0.1:5000/allocation/student/2,,"Redirected to the dashboard with ""You can only view your own allocation."""
+AUTHZ-01,Authorization,RA-10,UI only,P1,Admin reaches all management pages,Logged in as admin.,"1. Open Allocations, New Allocation, Available Rooms, Rooms, Students from the sidebar/buttons",,All pages load without a permission error.
+AUTHZ-02,Authorization,RA-10,UI only,P2,Warden reaches all management pages,Logged in as warden.,1. Repeat the AUTHZ-01 pages,,All pages load.
+AUTHZ-03,Authorization,RA-10,UI only,P1,Student blocked from allocation management,Logged in as student.,"1. Open http://127.0.0.1:5000/allocation/
+2. Open /allocation/create",,"Each redirects to the dashboard with ""You do not have permission to access this page."""
+AUTHZ-05,Authorization,RA-10,UI only,P2,Accountant blocked from allocations,Logged in as accountant@hms.test / accountant123.,1. Open /allocation/,,"Redirected with ""You do not have permission to access this page."""
+AUTHZ-07,Authorization,RA-10,UI only,P1,Student blocked from rooms and students pages,Logged in as student.,"1. Open /rooms
+2. Open /students",,"Both redirect with ""You do not have permission to access this page."""
+AUTHZ-10,Authorization,RA-10,UI only,P2,Student cannot open another allocation's reallocate page,Logged in as student. An allocation with id 2 exists.,1. Open http://127.0.0.1:5000/allocation/2/reallocate,,"Redirected with ""You do not have permission to access this page."""
+AUTHZ-11,Authorization,"RA-10, RA-12",UI + browser DevTools,P2,Student cannot cancel an allocation,Logged in as student. Allocation id 2 is Active.,"1. Open DevTools > Console and run:
+fetch(""/allocation/2/cancel"",{method:""POST"",headers:{""Content-Type"":""application/x-www-form-urlencoded""},body:""csrf_token=""+document.querySelector(""input[name=csrf_token]"").value})
+2. Log in as admin and check allocation 2",,The student request is refused (redirect to the dashboard / permission message); allocation 2 is still Active.
+SEC-01,Security,RA-14,UI only,P1,SQL injection in the search box,Logged in as admin.,"1. Allocations list > search for: ' OR '1'='1
+2. Search for: '; DROP TABLE rooms; --",SQL payloads,"Page renders normally (""No allocations found."" or a normal list); no error page; Rooms page still shows all rooms."
+SEC-03,Security,RA-14,UI only,P1,XSS in the search box,Logged in as admin.,1. Allocations list > search for: <script>alert(1)</script>,<script>alert(1)</script>,No alert box appears; the text is displayed as plain text in the search field (escaped).
+SEC-05,Security,RA-12,UI + browser DevTools,P2,Forged CSRF token is rejected,Logged in as admin.,"1. Open New Allocation, fill the form
+2. In DevTools set the hidden csrf_token value to ""forged""
+3. Submit",csrf_token=forged,"Page ""Your request could not be verified"" (HTTP 400); nothing created."
+SEC-06,Security,RA-11,UI only,P2,No session bleed between users,,"1. Log in as admin, then Logout
+2. Log in as warden",,Warden Dashboard shows the warden's name and no admin-only content.
+SEC-07,Security,RA-13,UI only,P1,Demo credentials are not displayed,Server started normally (SHOW_DEMO_CREDENTIALS not set).,1. Open the login page and read it completely,,No demo accounts or passwords are listed on the page.
+DASH-01,Dashboards,RA-15,UI only,P2,Dashboards match the data,Allocations from the cases above exist.,"1. View the Admin, Warden and Student dashboards in turn",,Admin: Total Students = 6 and Total Rooms = 6 equal what the Students and Rooms pages show; active allocations and occupancy bar agree with the Allocations list. Student: shows own room.
+UI-01,UI,UI-02,UI + browser DevTools,P1,Mobile layout (390 px wide),Logged in as admin; DevTools device toolbar set to 390 x 844.,"1. Visit Dashboard, Allocations, Available Rooms, Rooms, Students, New Allocation
+2. On each page: scroll horizontally; look at the title next to the hamburger button
+3. Tap the hamburger button",,No page scrolls sideways (wide tables scroll inside their card); the hamburger never covers the page title; tapping it opens the navigation drawer.
+UI-02,UI,UI-01,UI only,P2,Menus match the role,,"1. Log in as admin, then warden, then student; read the sidebar each time",,"Admin and warden: Dashboard, Allocations, Available Rooms, Rooms, Students. Student: Dashboard, Available Rooms, My Allocation. ""My Allocation"" never appears for admin/warden."
+UI-03,UI,"UI-05, RA-11",UI only,P1,Single logout; cache not reused after logout,Logged in as admin.,"1. Count the Logout controls visible on screen
+2. Click Logout
+3. Press the browser Back button",,Exactly one Logout control. After Back the dashboard content is NOT shown; you are sent to the login page.
+ADD-01,Data entry,RA-16,UI only,P2,Add a hostel block,Logged in as admin. Run AFTER all other cases (it changes the totals checked by DASH-01).,"1. Sidebar > Rooms > Add block
+2. Block name: Block C; Location: South Campus
+3. Click Add block",Block C / South Campus,"Redirected to the Rooms page with the message ""Block ""Block C"" added.""; Block C appears in the block filter of Allocations."
+ADD-02,Data entry,RA-16,UI only,P2,Add a room,ADD-01 done.,"1. Rooms > Add room
+2. Block: Block C; Room number: 301; Floor: 3; Capacity: 2; Status: Available
+3. Click Add room",Block C / 301 / floor 3 / 2 beds,"Message ""Room 301 added to Block C.""; the Rooms table shows Block C 301 with 0 / 2 beds"" and status Available; the New Allocation room list offers it."""
+ADD-03,Data entry,RA-16,UI only,P2,Add a student and log in as that student,ADD-02 done.,"1. Students > Add student
+2. Name: Frank Green; E-mail: frank@student.test; Roll number: STU900; Course: B.Tech IT; Batch: 2026; Password and confirmation: Frank#Pass123
+3. Click Add student
+4. Log out; log in as frank@student.test / Frank#Pass123",Frank Green / STU900,"Message ""Student Frank Green (STU900) added.""; Frank appears in the Students list with no allocation; the new login works and shows the student menu (Dashboard, Available Rooms, My Allocation)."
+ADD-04,Data entry,RA-16,UI only,P2,Validation and duplicates on the add forms,Logged in as admin; ADD-03 done.,"1. Add student with E-mail john@student.test and everything else valid
+2. Add student with Roll number STU900 and a new e-mail
+3. Add student with Password abc and confirmation abc
+4. Add room: Block C, room number 301 again
+5. Add block named ""block c""",see steps,"1: ""A user with e-mail john@student.test already exists.""; 2: ""Roll number STU900 is already in use.""; 3: ""Password must be 8 to 128 characters long.""; 4: ""Room 301 already exists in Block C.""; 5: ""A block named ""block c"" already exists."" Every form is shown again with your entries kept (passwords are never refilled); nothing is created."
+ADD-05,Data entry,"RA-16, RA-10",UI only,P2,Only admins can add data,"Logged in as warden, then as student.","1. As warden open Rooms and Students: look for Add buttons
+2. As warden open http://127.0.0.1:5000/rooms/new
+3. As student open http://127.0.0.1:5000/students/new",,"Warden sees no Add buttons; both URLs redirect to the dashboard with ""You do not have permission to access this page."""

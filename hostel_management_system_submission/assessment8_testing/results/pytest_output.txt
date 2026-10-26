@@ -1,0 +1,41 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.3.2, pluggy-1.7.0
+rootdir: /home/claude/work/hms
+configfile: pytest.ini
+testpaths: tests
+plugins: cov-5.0.0
+collected 317 items
+
+tests/test_admin_data_entry.py ......................................... [ 12%]
+.......................                                                  [ 20%]
+tests/test_allocation_integrity.py .....................                 [ 26%]
+tests/test_authorization.py .........................................    [ 39%]
+tests/test_csrf.py ...............                                       [ 44%]
+tests/test_manual_scenarios_dry_run.py ..                                [ 45%]
+tests/test_room_allocation.py .......................................... [ 58%]
+..............                                                           [ 62%]
+tests/test_security.py ...............................                   [ 72%]
+tests/test_ui.py ...................................                     [ 83%]
+tests/test_ui_behavior.py ................................               [ 93%]
+tests/test_validation.py ....................                            [100%]
+
+- generated xml file: /home/claude/work/hms/assessment8_testing/results/junit.xml -
+
+---------- coverage: platform linux, python 3.12.3-final-0 -----------
+Name                                       Stmts   Miss Branch BrPart  Cover   Missing
+--------------------------------------------------------------------------------------
+hms_app/__init__.py                           78      0     10      1    99%   19->exit
+hms_app/__main__.py                            4      4      2      0     0%   1-6
+hms_app/auth.py                               79      2     18      2    96%   44, 105
+hms_app/config.py                             40      0      2      0   100%
+hms_app/models.py                            222     29     28      2    85%   49, 137, 154, 166, 242, 255, 258-262, 265, 279, 282, 285, 299-304, 307, 310, 324-326, 330, 344, 347
+hms_app/routes/admin_data_routes.py          120      6     48      0    96%   97-99, 150-152
+hms_app/routes/auth_routes.py                 38      2     10      1    94%   23-24
+hms_app/routes/main_routes.py                 42      5     12      3    85%   15, 53-54, 61-62
+hms_app/routes/room_allocation_routes.py     166     13     56      7    91%   30->34, 148-149, 152-154, 167-168, 195-196, 214, 263, 265-266
+hms_app/seed.py                               60      1     14      2    96%   91, 93->87
+--------------------------------------------------------------------------------------
+TOTAL                                        849     62    200     18    92%
+Coverage XML written to file assessment8_testing/results/coverage.xml
+
+======================== 317 passed in 69.15s (0:01:09) ========================

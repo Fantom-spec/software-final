@@ -1,0 +1,68 @@
+{% extends "layout_authenticated.html" %}
+
+{% block title %}Add Room - {{ app_short_name }}{% endblock %}
+
+{% block page_title %}Add Room{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('main.rooms_list') }}">Rooms</a></li>
+<li class="breadcrumb-item active" aria-current="page">Add Room</li>
+{% endblock %}
+
+{% block page_content %}
+<div class="page-head">
+    <div><h2>Add Room</h2><p class="sub">Create a room in an existing block</p></div>
+    <a href="{{ url_for('main.rooms_list') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back to list</a>
+</div>
+
+<div class="card" style="max-width:820px">
+    <div class="card-body">
+        <form method="POST" class="needs-validation" novalidate>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <div class="row g-3 mb-3">
+                {% if not blocks %}
+                <div class="col-12">
+                    <div class="alert alert-warning mb-0" role="alert">There are no blocks yet. <a href="{{ url_for('admin_data.new_block') }}">Add a block</a> first.</div>
+                </div>
+                {% endif %}
+                <div class="col-md-6">
+                    <label for="block_id" class="form-label">Block <span class="text-danger">*</span></label>
+                    <select class="form-select" id="block_id" name="block_id" required>
+                        <option value="">{{ 'Select block' if blocks else 'No blocks available' }}</option>
+                        {% for b in blocks %}
+                        <option value="{{ b.block_id }}" {% if form.get('block_id') == b.block_id|string %}selected{% endif %}>{{ b.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="invalid-feedback">Please select a block.</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="room_number" class="form-label">Room number <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="room_number" name="room_number" maxlength="20" required value="{{ form.get('room_number', '') }}">
+                    <div class="invalid-feedback">Please enter a room number.</div>
+                </div>
+                <div class="col-md-4">
+                    <label for="floor" class="form-label">Floor <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="floor" name="floor" min="0" max="{{ max_floor }}" required value="{{ form.get('floor', '') }}">
+                    <div class="invalid-feedback">Enter a floor from 0 to {{ max_floor }}.</div>
+                </div>
+                <div class="col-md-4">
+                    <label for="capacity" class="form-label">Capacity (beds) <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="capacity" name="capacity" min="1" max="{{ max_capacity }}" required value="{{ form.get('capacity', '2') }}">
+                    <div class="invalid-feedback">Enter a capacity from 1 to {{ max_capacity }}.</div>
+                </div>
+                <div class="col-md-4">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="available" {% if form.get('status', 'available') == 'available' %}selected{% endif %}>Available</option>
+                        <option value="maintenance" {% if form.get('status') == 'maintenance' %}selected{% endif %}>Maintenance</option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary"{% if not blocks %} disabled{% endif %}><i class="bi bi-check-lg"></i> Add room</button>
+                <a href="{{ url_for('main.rooms_list') }}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,4 @@
+[run]
+branch = True
+source = hms_app
+omit = */static/*

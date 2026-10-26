@@ -1,0 +1,11 @@
+{# Flash messages: rendered at the top of the page content (authenticated layout) or below the login card. #}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+        {% set cat = 'danger' if category == 'error' else ('info' if category == 'message' else category) %}
+        <div class="alert alert-{{ cat }} alert-dismissible fade show" role="alert" style="{% if not current_user %}max-width: 430px; margin: 1rem auto;{% endif %}">
+            <i class="bi bi-{{ 'check-circle-fill' if cat == 'success' else 'exclamation-triangle-fill' if cat in ('danger', 'warning') else 'info-circle-fill' }} me-2"></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endwith %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Request rejected - {{ app_name }}{% endblock %}
+{% block body_content %}
+<div class="container py-5" style="max-width: 520px;">
+    <div class="alert alert-warning" role="alert">
+        <h1 class="h5">Your request could not be verified</h1>
+        <p class="mb-2">The security token for this form was missing or has expired ({{ reason }}).</p>
+        <a class="btn btn-primary btn-sm" href="{{ url_for('main.dashboard') }}">Go back and try again</a>
+    </div>
+</div>
+{% endblock %}

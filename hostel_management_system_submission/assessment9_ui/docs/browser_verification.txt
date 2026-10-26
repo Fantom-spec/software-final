@@ -1,0 +1,62 @@
+# Browser verification: scripts/browser/verify_ui.mjs against scripts/serve_demo.py
+# Run: 2026-10-25T15:48:59+00:00   Browser: headless Chromium via puppeteer-core
+PASS  layout 320px /  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 320px /allocation/  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 320px /allocation/available  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 320px /rooms  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 320px /students  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 320px /allocation/create  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 320px /blocks/new  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 320px /rooms/new  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 320px /students/new  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 390px /  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 390px /allocation/  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 390px /allocation/available  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 390px /rooms  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 390px /students  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 390px /allocation/create  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 390px /blocks/new  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 390px /rooms/new  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 390px /students/new  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 768px /  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 768px /allocation/  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 768px /allocation/available  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 768px /rooms  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 768px /students  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 768px /allocation/create  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 768px /blocks/new  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 768px /rooms/new  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 768px /students/new  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 1366px /  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 1366px /allocation/  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 1366px /allocation/available  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 1366px /rooms  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 1366px /students  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 1366px /allocation/create  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 1366px /blocks/new  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 1366px /rooms/new  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  layout 1366px /students/new  -> horizontalOverflow=0px toggleOverlapsTitle=false
+PASS  mobile: menu closed initially, opens on hamburger tap
+PASS  logout button (POST+CSRF) ends the session  -> http://127.0.0.1:5055/auth/login
+PASS  logout gives feedback message  -> You have been logged out.
+PASS  after logout, dashboard is not reachable
+PASS  admin sidebar items  -> Dashboard | Allocations | Available Rooms | Rooms | Students
+PASS  only one visible Logout control (desktop)
+PASS  cancel: confirmation modal shown with message; "Go back" keeps the allocation  -> modal="Are you sure you want to cancel this allocation?" rows 3->3
+PASS  cancel: "Confirm" cancels the allocation and shows feedback  -> Allocation cancelled successfully.
+PASS  validation error shown after server-side check  -> End date cannot be earlier than start date.
+PASS  validation error keeps all entered values  -> {"s":"4","r":"2","sd":"2026-11-10","ed":"2026-11-01"}
+PASS  error message is visible in the first screen (no scrolling needed)
+PASS  error message persists beyond the 5 s auto-dismiss window
+PASS  submit button stays usable after a blocked submit  -> {"disabled":false,"text":"Create allocation"}
+PASS  admin adds a block through the form  -> Block "Block C" added.
+PASS  admin adds a room through the form  -> Room 301 added to Block C. | 301 Block C 3 2 0 / 2 beds 2 Available
+PASS  admin adds a student through the form  -> Student Frank Green (STU900) added.
+PASS  new student can log in and sees the student menu  -> Dashboard | Available Rooms | My Allocation
+PASS  student sidebar items  -> Dashboard | Available Rooms | My Allocation
+PASS  My Allocation opens the student's own allocation page  -> http://127.0.0.1:5055/allocation/student/1
+PASS  no CSP violations in any page
+PASS  no JavaScript/console errors
+PASS  no failed HTTP requests (4xx/5xx) other than intended ones
+
+58/58 browser checks passed

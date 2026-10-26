@@ -1,0 +1,6 @@
+{
+  "command": "python -m pytest -p no:cacheprovider --junitxml=assessment8_testing/results/junit.xml --cov=hms_app --cov-branch --cov-report=xml:assessment8_testing/results/coverage.xml --cov-report=term-missing",
+  "started": "2026-10-25T15:47:42+00:00",
+  "wall_seconds": 69.98,
+  "exit_code": 0
+}

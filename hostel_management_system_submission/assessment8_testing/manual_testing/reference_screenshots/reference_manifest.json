@@ -1,0 +1,484 @@
+{
+  "generated": "2026-10-26T02:15:21.381Z",
+  "note": "Script-captured reference screenshots of the EXPECTED state. Not evidence of human execution.",
+  "cases": {
+    "AUTH-01": [
+      {
+        "file": "AUTH-01_1.jpg",
+        "caption": "Admin dashboard after a successful login, with the welcome message"
+      }
+    ],
+    "AUTH-02": [
+      {
+        "file": "AUTH-02_1.jpg",
+        "caption": "Warden dashboard after login"
+      }
+    ],
+    "AUTH-03": [
+      {
+        "file": "AUTH-03_1.jpg",
+        "caption": "Student dashboard after login"
+      }
+    ],
+    "AUTH-04": [
+      {
+        "file": "AUTH-04_1.jpg",
+        "caption": "Wrong password: error message, still on the login page"
+      }
+    ],
+    "AUTH-05": [
+      {
+        "file": "AUTH-05_1.jpg",
+        "caption": "Unknown user: the same generic error message"
+      }
+    ],
+    "AUTH-06": [
+      {
+        "file": "AUTH-06_1.jpg",
+        "caption": "Step 1: after clicking Logout - login page with \"You have been logged out.\""
+      },
+      {
+        "file": "AUTH-06_2.jpg",
+        "caption": "Step 2: opening /allocation/ while logged out redirects to the login page"
+      }
+    ],
+    "AUTH-07": [
+      {
+        "file": "AUTH-07_1.jpg",
+        "caption": "Anonymous access to /rooms is redirected to the login page with a message"
+      }
+    ],
+    "AUTH-08": [
+      {
+        "file": "AUTH-08_1.jpg",
+        "caption": "Login without the CSRF token: request rejected (HTTP 400 page)"
+      }
+    ],
+    "AUTH-09": [
+      {
+        "file": "AUTH-09_1.jpg",
+        "caption": "Attempt 5 of 5 (wrong password): still the normal error message"
+      },
+      {
+        "file": "AUTH-09_2.jpg",
+        "caption": "Attempt 6 with the CORRECT password: locked out message"
+      },
+      {
+        "file": "AUTH-09_3.jpg",
+        "caption": "A different account (John) can still log in"
+      }
+    ],
+    "AUTH-10": [
+      {
+        "file": "AUTH-10_1.jpg",
+        "caption": "Step 1: opening /auth/logout in the address bar - \"Method Not Allowed\""
+      },
+      {
+        "file": "AUTH-10_2.jpg",
+        "caption": "Step 2: the dashboard is still shown - you are still logged in"
+      }
+    ],
+    "ALLOC-01": [
+      {
+        "file": "ALLOC-01_1.jpg",
+        "caption": "John Doe allocated to Block A 101 (open-ended): success message and the new row"
+      }
+    ],
+    "ALLOC-08": [
+      {
+        "file": "ALLOC-08_1.jpg",
+        "caption": "Jane Smith allocated with an end date (90 days ahead)"
+      }
+    ],
+    "OCC-01": [
+      {
+        "file": "OCC-01_1.jpg",
+        "caption": "Rooms page: Block A 101 is 2 / 2 beds and Full"
+      }
+    ],
+    "ALLOC-05": [
+      {
+        "file": "ALLOC-05_1.jpg",
+        "caption": "Second allocation for John refused: \"already has an active room allocation\""
+      }
+    ],
+    "ALLOC-15": [
+      {
+        "file": "ALLOC-15_1.jpg",
+        "caption": "The same screen: the form is shown again with John Doe and Block B 101 still selected"
+      }
+    ],
+    "ALLOC-11": [
+      {
+        "file": "ALLOC-11_1.jpg",
+        "caption": "Bob Wilson allocated with start date = end date = today"
+      }
+    ],
+    "ALLOC-02": [
+      {
+        "file": "ALLOC-02_1.jpg",
+        "caption": "Tab 2 (stale form): room 102 is no longer available - the server refuses the allocation"
+      }
+    ],
+    "ALLOC-09": [
+      {
+        "file": "ALLOC-09_1.jpg",
+        "caption": "Warden allocates Carlos Diaz to Block A 201"
+      }
+    ],
+    "ALLOC-03": [
+      {
+        "file": "ALLOC-03_1.jpg",
+        "caption": "Student id 99999 (edited in DevTools): \"Selected student does not exist.\""
+      }
+    ],
+    "ALLOC-04": [
+      {
+        "file": "ALLOC-04_1.jpg",
+        "caption": "Room id 99999 (edited in DevTools): \"Selected room does not exist.\""
+      }
+    ],
+    "ALLOC-06": [
+      {
+        "file": "ALLOC-06_1.jpg",
+        "caption": "Submitting with Student and Room empty: the required fields are flagged and nothing is sent"
+      }
+    ],
+    "ALLOC-07": [
+      {
+        "file": "ALLOC-07_1.jpg",
+        "caption": "Start date \"2026-13-45\" (field changed to text in DevTools): \"Invalid date format\""
+      }
+    ],
+    "ALLOC-10": [
+      {
+        "file": "ALLOC-10_1.jpg",
+        "caption": "End date (today+5) before start date (today+10): the form refuses to submit"
+      }
+    ],
+    "ALLOC-14": [
+      {
+        "file": "ALLOC-14_1.jpg",
+        "caption": "Start date 1900-01-01: \"Dates must be between 2000-01-01 and 2100-12-31.\""
+      }
+    ],
+    "ALLOC-13": [
+      {
+        "file": "ALLOC-13_1.jpg",
+        "caption": "CSRF token deleted in DevTools: \"Your request could not be verified\" (HTTP 400)"
+      }
+    ],
+    "REALLOC-01": [
+      {
+        "file": "REALLOC-01_1.jpg",
+        "caption": "John reallocated to Block B 101: message \"Student reallocated to room 101 successfully.\""
+      }
+    ],
+    "OCC-02": [
+      {
+        "file": "OCC-02_1.jpg",
+        "caption": "Rooms page: Block A 101 is now 1 / 2 beds and Available; Block B 101 is 1 / 3"
+      }
+    ],
+    "REALLOC-03": [
+      {
+        "file": "REALLOC-03_1.jpg",
+        "caption": "Reallocate form for Carlos (list expanded for the screenshot): Block A 102 (full) is not offered"
+      }
+    ],
+    "REALLOC-06": [
+      {
+        "file": "REALLOC-06_1.jpg",
+        "caption": "Room id 1 = Jane's current room (option value edited in DevTools): \"Student is already in that room. Choose a different room.\""
+      }
+    ],
+    "REALLOC-04": [
+      {
+        "file": "REALLOC-04_1.jpg",
+        "caption": "No room selected: the field is flagged and the form is not submitted"
+      }
+    ],
+    "REALLOC-02": [
+      {
+        "file": "REALLOC-02_1.jpg",
+        "caption": "Room id 99999 (edited in DevTools): \"Selected room does not exist.\""
+      }
+    ],
+    "REALLOC-05": [
+      {
+        "file": "REALLOC-05_1.jpg",
+        "caption": "CSRF token deleted: \"Your request could not be verified\" (HTTP 400); Jane stays where she is"
+      }
+    ],
+    "CANCEL-02": [
+      {
+        "file": "CANCEL-02_1.jpg",
+        "caption": "Confirmation dialog for cancelling Carlos Diaz's allocation"
+      },
+      {
+        "file": "CANCEL-02_2.jpg",
+        "caption": "After \"Go back\": the dialog is closed and Carlos is still Active"
+      }
+    ],
+    "CANCEL-01": [
+      {
+        "file": "CANCEL-01_1.jpg",
+        "caption": "After \"Confirm\": \"Allocation cancelled successfully.\" and Carlos is gone from the active list"
+      }
+    ],
+    "CANCEL-04": [
+      {
+        "file": "CANCEL-04_1.jpg",
+        "caption": "Status = Cancelled: Carlos is listed as Cancelled with no action buttons"
+      }
+    ],
+    "CANCEL-03": [
+      {
+        "file": "CANCEL-03_1.jpg",
+        "caption": "Cancel without a CSRF token: HTTP 400 page; Bob's allocation is untouched"
+      }
+    ],
+    "LIST-01": [
+      {
+        "file": "LIST-01_1.jpg",
+        "caption": "Search \"Jane\": only Jane Smith's row"
+      },
+      {
+        "file": "LIST-01_2.jpg",
+        "caption": "Search \"nobody-matches\": \"No allocations found.\""
+      }
+    ],
+    "LIST-02": [
+      {
+        "file": "LIST-02_1.jpg",
+        "caption": "Block B filter: only Block B rows"
+      },
+      {
+        "file": "LIST-02_2.jpg",
+        "caption": "Status Cancelled filter: only cancelled allocations"
+      }
+    ],
+    "AVAIL-01": [
+      {
+        "file": "AVAIL-01_1.jpg",
+        "caption": "Available Rooms: Block A 102 (full) is not listed"
+      }
+    ],
+    "AVAIL-03": [
+      {
+        "file": "AVAIL-03_1.jpg",
+        "caption": "Step 1: \"Show full rooms\" ticked - the full room appears"
+      },
+      {
+        "file": "AVAIL-03_2.jpg",
+        "caption": "Step 2: Block B selected - only Block B rooms"
+      }
+    ],
+    "OCC-03": [
+      {
+        "file": "OCC-03_1.jpg",
+        "caption": "New Allocation room list (expanded for the screenshot): the full Block A 102 is not offered"
+      }
+    ],
+    "AVAIL-02": [
+      {
+        "file": "AVAIL-02_1.jpg",
+        "caption": "Student view of Available Rooms (read-only)"
+      }
+    ],
+    "STUDENT-01": [
+      {
+        "file": "STUDENT-01_1.jpg",
+        "caption": "My Allocation: John Doe's room (Block B 101 after the reallocation)"
+      }
+    ],
+    "STUDENT-02": [
+      {
+        "file": "STUDENT-02_1.jpg",
+        "caption": "Opening another student's allocation: redirected to the dashboard with a message"
+      }
+    ],
+    "AUTHZ-01": [
+      {
+        "file": "AUTHZ-01_1.jpg",
+        "caption": "Admin can open the Students page (all management pages load)"
+      }
+    ],
+    "AUTHZ-02": [
+      {
+        "file": "AUTHZ-02_1.jpg",
+        "caption": "Warden can open the Rooms page"
+      }
+    ],
+    "AUTHZ-03": [
+      {
+        "file": "AUTHZ-03_1.jpg",
+        "caption": "Student opening /allocation/: redirected with \"You do not have permission...\""
+      }
+    ],
+    "AUTHZ-05": [
+      {
+        "file": "AUTHZ-05_1.jpg",
+        "caption": "Accountant opening /allocation/: permission message"
+      }
+    ],
+    "AUTHZ-07": [
+      {
+        "file": "AUTHZ-07_1.jpg",
+        "caption": "Student opening /rooms: permission message"
+      }
+    ],
+    "AUTHZ-10": [
+      {
+        "file": "AUTHZ-10_1.jpg",
+        "caption": "Student opening /allocation/2/reallocate: permission message"
+      }
+    ],
+    "AUTHZ-11": [
+      {
+        "file": "AUTHZ-11_1.jpg",
+        "caption": "Admin check after the student's forged request: Jane's allocation (id 2) is still Active"
+      }
+    ],
+    "SEC-01": [
+      {
+        "file": "SEC-01_1.jpg",
+        "caption": "Payload 1 in the search box: normal page, no error"
+      },
+      {
+        "file": "SEC-01_2.jpg",
+        "caption": "Payload 2: normal page; the Rooms table is unaffected"
+      },
+      {
+        "file": "SEC-01_3.jpg",
+        "caption": "Rooms page afterwards: all rooms are still there"
+      }
+    ],
+    "SEC-03": [
+      {
+        "file": "SEC-03_1.jpg",
+        "caption": "XSS payload: shown as plain text in the search field, no alert box"
+      }
+    ],
+    "SEC-05": [
+      {
+        "file": "SEC-05_1.jpg",
+        "caption": "Forged CSRF token: HTTP 400 \"Your request could not be verified\""
+      }
+    ],
+    "SEC-06": [
+      {
+        "file": "SEC-06_1.jpg",
+        "caption": "After admin logout and warden login: the Warden dashboard only"
+      }
+    ],
+    "SEC-07": [
+      {
+        "file": "SEC-07_1.jpg",
+        "caption": "Login page: no demo accounts or passwords are displayed"
+      }
+    ],
+    "DASH-01": [
+      {
+        "file": "DASH-01_1.jpg",
+        "caption": "Admin dashboard with the data created by the previous cases"
+      }
+    ],
+    "UI-01": [
+      {
+        "file": "UI-01_1.jpg",
+        "caption": "Mobile (390 px): Allocations - no sideways scrolling, hamburger beside the title"
+      },
+      {
+        "file": "UI-01_2.jpg",
+        "caption": "Mobile: the navigation drawer after tapping the hamburger button"
+      },
+      {
+        "file": "UI-01_3.jpg",
+        "caption": "Mobile: a form page (Add room) also fits the screen"
+      }
+    ],
+    "UI-02": [
+      {
+        "file": "UI-02_1.jpg",
+        "caption": "Admin sidebar"
+      },
+      {
+        "file": "UI-02_2.jpg",
+        "caption": "Warden sidebar"
+      },
+      {
+        "file": "UI-02_3.jpg",
+        "caption": "Student sidebar"
+      }
+    ],
+    "UI-03": [
+      {
+        "file": "UI-03_1.jpg",
+        "caption": "Exactly one Logout control (bottom of the sidebar)"
+      },
+      {
+        "file": "UI-03_2.jpg",
+        "caption": "After Logout and the browser Back button: the login page, not the dashboard"
+      }
+    ],
+    "ADD-01": [
+      {
+        "file": "ADD-01_1.jpg",
+        "caption": "Block C added: message on the Rooms page"
+      }
+    ],
+    "ADD-02": [
+      {
+        "file": "ADD-02_1.jpg",
+        "caption": "Room 301 added to Block C: message and the new row in the table"
+      }
+    ],
+    "ADD-03": [
+      {
+        "file": "ADD-03_1.jpg",
+        "caption": "Step 3: Frank Green added - message and the new row in the Students list"
+      },
+      {
+        "file": "ADD-03_2.jpg",
+        "caption": "Step 4: logging in as Frank works and shows the student menu"
+      }
+    ],
+    "ADD-04": [
+      {
+        "file": "ADD-04_1.jpg",
+        "caption": "1: duplicate e-mail rejected"
+      },
+      {
+        "file": "ADD-04_2.jpg",
+        "caption": "2: duplicate roll number rejected"
+      },
+      {
+        "file": "ADD-04_3.jpg",
+        "caption": "3: too-short password rejected"
+      },
+      {
+        "file": "ADD-04_4.jpg",
+        "caption": "4: duplicate room number in the same block rejected"
+      },
+      {
+        "file": "ADD-04_5.jpg",
+        "caption": "5: duplicate block name rejected (case-insensitive)"
+      }
+    ],
+    "ADD-05": [
+      {
+        "file": "ADD-05_1.jpg",
+        "caption": "Warden: the Rooms page has no Add buttons"
+      },
+      {
+        "file": "ADD-05_2.jpg",
+        "caption": "Warden opening /rooms/new: permission message"
+      },
+      {
+        "file": "ADD-05_3.jpg",
+        "caption": "Student opening /students/new: permission message"
+      }
+    ]
+  }
+}

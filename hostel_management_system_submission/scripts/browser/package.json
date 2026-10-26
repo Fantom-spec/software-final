@@ -1,0 +1,11 @@
+{
+  "name": "hms-browser-tools",
+  "private": true,
+  "type": "module",
+  "description": "Headless-browser tooling for layout checks and screenshots (dev only, not part of the app).",
+  "dependencies": {
+    "@sparticuz/chromium": "131.0.1",
+    "puppeteer-core": "23.11.1",
+    "docx": "9.6.1"
+  }
+}
