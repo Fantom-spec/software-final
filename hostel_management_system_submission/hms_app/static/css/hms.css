@@ -2,6 +2,7 @@
     --hms-bg: #f4f6fb;
     --hms-surface: #fff;
     --hms-ink: #1c2333;
+    --hms-ink-on-dark: #fff;
     --hms-muted: #6b7385;
     --hms-line: #e4e8f0;
     --hms-brand: #3b4cca;
@@ -16,11 +17,14 @@
     --hms-transition: 0.2s ease;
 }
 
+/* Dark mode disabled - using light theme always */
+/*
 @media (prefers-color-scheme: dark) {
     :root {
         --hms-bg: #0f1320;
         --hms-surface: #181d2e;
         --hms-ink: #e8ebf5;
+        --hms-ink-on-dark: #000000;
         --hms-muted: #9aa3b8;
         --hms-line: #2a3149;
         --hms-brand: #7b8cff;
@@ -68,6 +72,7 @@
         background-color: var(--hms-brand-soft);
     }
 }
+*/
 
 * {
     box-sizing: border-box;
@@ -79,6 +84,19 @@ body {
     font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     min-height: 100vh;
     margin: 0;
+}
+
+/* Light backgrounds: dark text */
+.card, .modal-content, .dropdown-menu, .form-control, .form-select,
+.top-bar, .page-footer, .login-card, .stat, .dashboard-stat,
+.quick-action-btn, .filter-bar, .table-responsive, .pagination .page-link {
+    color: var(--hms-ink);
+}
+
+/* Dark backgrounds: light text */
+.sidebar, .sidebar-brand a, .sidebar-link, .user-info, .logout-link,
+.brand-icon, .user-avatar, .sidebar-toggle {
+    color: var(--hms-sidebar-text);
 }
 
 h1, h2, h3, h4, h5 {
